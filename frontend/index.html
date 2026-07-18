@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quotes & Colors</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background-color 0.8s ease-in-out;
+      background-color: #2C3E50;
+      color: #FFFFFF;
+      padding: 20px;
+    }
+
+    .quote-card {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 40px 30px;
+      border-radius: 20px;
+      text-align: center;
+      max-width: 550px;
+      width: 100%;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .quote-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .quote-icon {
+      font-size: 3rem;
+      line-height: 1;
+      opacity: 0.5;
+      margin-bottom: 10px;
+    }
+
+    .quote-text {
+      font-size: 1.3rem;
+      font-weight: 300;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.4s ease;
+    }
+
+    .quote-author {
+      font-size: 1rem;
+      font-weight: 600;
+      opacity: 0.85;
+      letter-spacing: 1px;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+      transition: opacity 0.4s ease;
+    }
+
+    .btn-next {
+      background: #FFFFFF;
+      color: #222222;
+      border: none;
+      padding: 12px 30px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .btn-next:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn-next:active {
+      transform: scale(0.98);
+    }
+
+    .fade-out {
+      opacity: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="quote-card">
+    <div class="quote-icon">“</div>
+    <div class="quote-text" id="quote">Click below to get your first quote!</div>
+    <div class="quote-author" id="author"></div>
+    <button class="btn-next" onclick="getQuote()">New Quote</button>
+  </div>
+
+  <script>
+    async function getQuote() {
+      const quoteEl = document.getElementById('quote');
+      const authorEl = document.getElementById('author');
+
+      // 1. نعمل Fade Out بسيط للكلام الأول
+      quoteEl.classList.add('fade-out');
+      authorEl.classList.add('fade-out');
+
+      try {
+        const response = await fetch('http://localhost:5000/api/quote');
+        const data = await response.json();
+
+        // ننتظر 300ms لحد ما الـ Fade Out يخلص، بعدين نغير الداتا واللون
+        setTimeout(() => {
+          quoteEl.innerText = data.quote;
+          authorEl.innerText = `- ${data.author}`;
+          document.body.style.backgroundColor = data.color;
+
+          // 2. نعمل Fade In بالداتا الجديدة
+          quoteEl.classList.remove('fade-out');
+          authorEl.classList.remove('fade-out');
+        }, 300);
+
+      } catch (err) {
+        setTimeout(() => {
+          quoteEl.innerText = "Failed to load quote. Is the backend running?";
+          authorEl.innerText = "";
+          quoteEl.classList.remove('fade-out');
+          authorEl.classList.remove('fade-out');
+        }, 300);
+      }
+    }
+  </script>
+
+</body>
+</html>
