@@ -14,7 +14,7 @@ services:
     volumes:
       - db_data:/data/db
     networks:
-      - quote-network
+      - backend-db
   # Tier 2: Backend API Tier
   backend:
     build:
@@ -31,7 +31,8 @@ services:
     depends_on:
       - database
     networks:
-      - quote-network
+      - backend-db
+      - frontend-backend
   # Tier 3: Frontend Tier
   frontend:
     build:
@@ -44,9 +45,11 @@ services:
     depends_on:
       - backend
     networks:
-      - quote-network
+      - frontend-backend
 networks:
-  quote-network:
+  frontend-backend:
+    driver: bridge
+  backend-db:
     driver: bridge
 volumes:
   db_data:
