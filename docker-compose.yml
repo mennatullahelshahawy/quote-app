@@ -1,0 +1,53 @@
+services:
+  database:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: pass
+      MONGO_INITDB_DATABASE: quotes_app
+    ports:
+      - "27017:27017"
+    volumes:
+      - db_data:/data/db
+    networks:
+      - quote-network
+  # Tier 2: Backend API Tier
+  backend:
+    build:
+      context: ./backend  # Path to folder containing Python app.py & requirements.txt
+      dockerfile: Dockerfile
+    container_name: quote-backend
+    restart: always
+    environment:
+      PORT: 5000
+      # Connects using the root credentials defined in MongoDB
+      DB_URI: mongodb://root:pass@database:27017/quote_db?authSource=admin
+    ports:
+      - "5000:5000"
+    depends_on:
+      - database
+    networks:
+      - quote-network
+  # Tier 3: Frontend Tier
+  frontend:
+    build:
+      context: ./frontend  # Path to folder containing Frontend Dockerfile
+      dockerfile: Dockerfile
+    container_name: quote-frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - quote-network
+networks:
+  quote-network:
+    driver: bridge
+volumes:
+  db_data:
+    driver: local
