@@ -4,8 +4,10 @@ WORKDIR /quote-app
 
 COPY requirements.txt .
 
-RUN pip install requirements.txt
+RUN pip install -r requirements.txt
 
-COPY app.py
+COPY app.py .
 
-CMD["python","app.py"]
+CMD ["python","app.py"]
+
+EXPOSE 5000

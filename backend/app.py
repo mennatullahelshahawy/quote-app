@@ -5,7 +5,7 @@ from pymongo import MongoClient
 app = Flask(__name__)
 CORS(app)
 
-db = MongoClient("mongodb://root:example@localhost:27017/quotes-app?authSource=admin")["quotes-app"]
+db = MongoClient("mongodb://root:pass@mongodb:27017/quotes-app?authSource=admin")["quotes-app"]
 
 @app.route('/api/quote')
 def get_quote():
