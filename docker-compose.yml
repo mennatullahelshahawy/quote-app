@@ -15,16 +15,13 @@ services:
       - db_data:/data/db
     networks:
       - backend-db
-  # Tier 2: Backend API Tier
   backend:
     build:
-      context: ./backend  # Path to folder containing Python app.py & requirements.txt
+      context: ./backend
       dockerfile: Dockerfile
     container_name: quote-backend
     restart: always
     environment:
-      PORT: 5000
-      # Connects using the root credentials defined in MongoDB
       DB_URI: mongodb://root:pass@mongodb:27017/quote_db?authSource=admin
     ports:
       - "5000:5000"
@@ -33,10 +30,9 @@ services:
     networks:
       - backend-db
       - frontend-backend
-  # Tier 3: Frontend Tier
   frontend:
     build:
-      context: ./frontend  # Path to folder containing Frontend Dockerfile
+      context: ./frontend 
       dockerfile: Dockerfile
     container_name: quote-frontend
     restart: always
