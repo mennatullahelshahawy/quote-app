@@ -21,10 +21,10 @@ services:
       dockerfile: Dockerfile
     container_name: quote-backend
     restart: always
-    environment:
-      DB_URI: mongodb://root:pass@mongodb:27017/quote_db?authSource=admin
     ports:
       - "5000:5000"
+    env_file:
+      - .env
     depends_on:
       - database
     networks:
