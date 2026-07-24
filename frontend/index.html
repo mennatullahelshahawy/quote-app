@@ -120,7 +120,7 @@
       authorEl.classList.add('fade-out');
 
       try {
-        const response = await fetch('http://localhost:5000/api/quote');
+        const response = await fetch(`http://${location.hostname}:5000/api/quote`);
         const data = await response.json();
 
         
