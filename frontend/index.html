@@ -115,7 +115,7 @@
       const quoteEl = document.getElementById('quote');
       const authorEl = document.getElementById('author');
 
-      // 1. نعمل Fade Out بسيط للكلام الأول
+      
       quoteEl.classList.add('fade-out');
       authorEl.classList.add('fade-out');
 
@@ -123,13 +123,13 @@
         const response = await fetch('http://localhost:5000/api/quote');
         const data = await response.json();
 
-        // ننتظر 300ms لحد ما الـ Fade Out يخلص، بعدين نغير الداتا واللون
+        
         setTimeout(() => {
           quoteEl.innerText = data.quote;
           authorEl.innerText = `- ${data.author}`;
           document.body.style.backgroundColor = data.color;
 
-          // 2. نعمل Fade In بالداتا الجديدة
+          
           quoteEl.classList.remove('fade-out');
           authorEl.classList.remove('fade-out');
         }, 300);
