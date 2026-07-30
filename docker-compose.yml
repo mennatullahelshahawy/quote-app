@@ -29,7 +29,7 @@ services:
     ports:
       - "5000:5000"
     depends_on:
-      - database
+      - mongodb
     networks:
       - backend-db
       - frontend-backend
